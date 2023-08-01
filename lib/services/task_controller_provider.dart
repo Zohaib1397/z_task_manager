@@ -10,6 +10,9 @@ class TaskControllerProvider extends ChangeNotifier{
 
     TaskControllerProvider(){
         tasksList.add(Task("Submit Internship Joining Letter", false, DateTime.now(), Colors.blue, CATEGORY.BASIC));
+        tasksList.add(Task("Testing purpose", true, DateTime.now(), Colors.yellow, CATEGORY.BASIC));
+        tasksList.add(Task("General notes", false, DateTime.now(), Colors.greenAccent, CATEGORY.BASIC));
+        tasksList.add(Task("White note", false, DateTime.now(), Colors.purpleAccent, CATEGORY.BASIC));
     }
 
     bool addTaskToList(Task task){
