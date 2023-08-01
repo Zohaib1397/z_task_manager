@@ -1,0 +1,5 @@
+enum CATEGORY{
+  BASIC,
+  URGENT,
+  IMPORTANT
+}
