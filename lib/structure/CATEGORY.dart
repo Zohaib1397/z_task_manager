@@ -1,0 +1,11 @@
+enum CATEGORY{
+  BASIC,
+  URGENT,
+  IMPORTANT
+}
+
+enum FILTER{
+  TODAY,
+  UPCOMING,
+  DONE
+}

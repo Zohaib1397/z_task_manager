@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:z_task_manager/structure/Category.dart';
+import 'package:z_task_manager/structure/CATEGORY.dart';
 
 import '../structure/Task.dart';
 
@@ -9,10 +9,10 @@ class TaskControllerProvider extends ChangeNotifier{
     List<Task> tasksList = [];
 
     TaskControllerProvider(){
-        tasksList.add(Task("Submit Internship Joining Letter", false, DateTime.now(), Colors.blue, CATEGORY.BASIC));
+        tasksList.add(Task("Task application", false, DateTime.now(), Colors.blue, CATEGORY.BASIC));
         tasksList.add(Task("Testing purpose", true, DateTime.now(), Colors.yellow, CATEGORY.BASIC));
+        tasksList.add(Task("Testing purpose", false, DateTime.utc(2023, 9, 4), Colors.greenAccent, CATEGORY.BASIC));
         tasksList.add(Task("General notes", false, DateTime.now(), Colors.greenAccent, CATEGORY.BASIC));
-        tasksList.add(Task("White note", false, DateTime.now(), Colors.purpleAccent, CATEGORY.BASIC));
     }
 
     bool addTaskToList(Task task){

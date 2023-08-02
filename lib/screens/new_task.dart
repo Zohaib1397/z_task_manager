@@ -9,7 +9,7 @@ import 'package:z_task_manager/services/task_controller_provider.dart';
 import 'package:z_task_manager/structure/TextFieldHandler.dart';
 
 import '../constants/reusable_ui.dart';
-import '../structure/Category.dart';
+import '../structure/CATEGORY.dart';
 import '../structure/Task.dart';
 
 class NewTaskScreen extends StatefulWidget {
