@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:z_task_manager/services/task_controller_provider.dart';
-import '../constants/reusable_ui.dart';
 import '../structure/CATEGORY.dart';
+import 'widgets/TaskCard.dart';
+
 import 'new_task.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,9 +18,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Widget> cardsList = [];
   FILTER filter = FILTER.TODAY;
-
+  bool searchToggle = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,38 +68,60 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(11.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Stack(
+                  alignment: Alignment.centerLeft,
                   children: [
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Welcome Back!"),
-                        Text(
-                          "Here's Update Today",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+
+                    AnimatedOpacity(
+                      opacity: searchToggle? 0 : 1.0,
+                      duration: Duration(milliseconds: 500),
+                      child: const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Welcome Back!"),
+                          Text(
+                            "Here's Update Today",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Material(
+                        elevation: searchToggle? 10: 0,
+                        color: searchToggle? Colors.white : Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: AnimatedContainer(
+                          height: searchToggle? 50 : 40,
+                          width: searchToggle? MediaQuery.of(context).size.width :40,
+                          duration: Duration(milliseconds: 600),
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            child: IconButton(
+                              visualDensity: VisualDensity.compact,
+                              padding: EdgeInsets.zero,
+                              icon: Icon(
+                                Icons.search,
+                                color: searchToggle? Colors.black: Colors.white,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  searchToggle = !searchToggle;
+                                });
+                              },
+                            ),
                           ),
                         ),
-                      ],
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: IconButton(
-                        visualDensity: VisualDensity.compact,
-                        padding: EdgeInsets.zero,
-                        icon: const Icon(
-                          Icons.search,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {},
                       ),
                     ),
                   ],
+
                 ),
               ),
               Padding(
