@@ -2,8 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+import 'package:z_task_manager/constants/constants.dart';
 import 'package:z_task_manager/services/task_controller_provider.dart';
 import '../structure/CATEGORY.dart';
+import '../structure/Task.dart';
+import '../structure/TextFieldHandler.dart';
 import 'widgets/TaskCard.dart';
 
 import 'new_task.dart';
@@ -20,8 +23,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   FILTER filter = FILTER.TODAY;
   bool searchToggle = false;
+  TextFieldHandler searchField = TextFieldHandler();
+
   @override
   Widget build(BuildContext context) {
+    if(!searchToggle){
+      searchField.controller.text = "";
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -71,10 +79,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Stack(
                   alignment: Alignment.centerLeft,
                   children: [
-
                     AnimatedOpacity(
-                      opacity: searchToggle? 0 : 1.0,
-                      duration: Duration(milliseconds: 500),
+                      opacity: searchToggle ? 0 : 1.0,
+                      duration: const Duration(milliseconds: 100),
                       child: const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -92,36 +99,63 @@ class _HomeScreenState extends State<HomeScreen> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: Material(
-                        elevation: searchToggle? 10: 0,
-                        color: searchToggle? Colors.white : Colors.black,
+                        elevation: searchToggle ? 10 : 0,
+                        color: searchToggle ? Colors.white : Colors.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: AnimatedContainer(
-                          height: searchToggle? 50 : 40,
-                          width: searchToggle? MediaQuery.of(context).size.width :40,
-                          duration: Duration(milliseconds: 600),
-                          child: Container(
-                            alignment: Alignment.centerLeft,
-                            child: IconButton(
-                              visualDensity: VisualDensity.compact,
-                              padding: EdgeInsets.zero,
-                              icon: Icon(
-                                Icons.search,
-                                color: searchToggle? Colors.black: Colors.white,
+                          width: searchToggle
+                              ? MediaQuery.of(context).size.width
+                              : 40,
+                          duration: const Duration(milliseconds: 200),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                child: IconButton(
+                                  visualDensity: VisualDensity.compact,
+                                  padding: EdgeInsets.zero,
+                                  icon: Icon(
+                                    Icons.search,
+                                    color: searchToggle
+                                        ? Colors.black
+                                        : Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      searchToggle = !searchToggle;
+                                    });
+                                  },
+                                ),
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  searchToggle = !searchToggle;
-                                });
-                              },
-                            ),
+                              searchToggle
+                                  ? Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 30.0),
+                                      child: TextField(
+                                        controller: searchField.controller,
+                                        autofocus: true,
+                                        decoration:
+                                            kTaskManagerDecoration.copyWith(
+                                          hintText: "Search..",
+                                          fillColor: Colors.transparent,
+                                        ),
+                                        onChanged: (value){
+                                          setState(() {
+
+                                          });
+                                        },
+                                      ),
+                                    )
+                                  : Container(),
+                            ],
                           ),
                         ),
                       ),
                     ),
                   ],
-
                 ),
               ),
               Padding(
@@ -172,28 +206,41 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Consumer<TaskControllerProvider>(
                 builder: (context, taskController, _) {
+                  List<Task> taskList = [];
+                  if (searchField.controller.text != "") {
+                    taskList = taskController.tasksList
+                        .where((element) =>
+                            element.text.contains(searchField.controller.text))
+                        .toList();
+                  } else {
+                    taskList = taskController.tasksList;
+                  }
 
-                  final taskList = taskController.tasksList;
                   List<Widget> cardsList = [];
-                  if(filter == FILTER.TODAY){
+                  if (filter == FILTER.TODAY) {
                     cardsList = taskList
-                        .where((element) => element.dueDate.day == DateTime.now().day && element.isCompleted==false)
-                        .map((task) => TaskCard(taskData: task,))
+                        .where((element) =>
+                            element.dueDate.day == DateTime.now().day &&
+                            element.isCompleted == false)
+                        .map((task) => TaskCard(
+                              taskData: task,
+                            ))
+                        .toList();
+                  } else if (filter == FILTER.UPCOMING) {
+                    cardsList = taskList
+                        .where((element) =>
+                            element.dueDate.day > DateTime.now().day &&
+                            element.isCompleted == false)
+                        .map((task) => TaskCard(
+                              taskData: task,
+                            ))
+                        .toList();
+                  } else if (filter == FILTER.DONE) {
+                    cardsList = taskList
+                        .where((e) => e.isCompleted)
+                        .map((e) => TaskCard(taskData: e))
                         .toList();
                   }
-                  else if(filter == FILTER.UPCOMING){
-                    cardsList = taskList
-                          .where((element) => element.dueDate.day > DateTime.now().day && element.isCompleted == false)
-                          .map((task) => TaskCard(taskData: task,))
-                          .toList();
-                  }
-                  else if(filter == FILTER.DONE){
-                    cardsList = taskList
-                          .where((e) => e.isCompleted)
-                          .map((e) => TaskCard(taskData: e))
-                          .toList();
-                  }
-
 
                   return Column(
                     children: cardsList,
