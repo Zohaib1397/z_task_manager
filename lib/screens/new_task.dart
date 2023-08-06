@@ -13,9 +13,9 @@ import '../structure/CATEGORY.dart';
 import '../structure/Task.dart';
 
 class NewTaskScreen extends StatefulWidget {
-  const NewTaskScreen({super.key});
-
+  NewTaskScreen(this.task, {super.key});
   static const String id = "NewTask_Screen";
+  Task? task;
 
   @override
   State<NewTaskScreen> createState() => _NewTaskScreenState();
@@ -35,6 +35,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
 
   //The current category/type of the task
   CATEGORY _category = CATEGORY.BASIC;
+
 
   //Following function is to show the relevant date time picker for IOS and android
   void showDateTimePicker() async {
@@ -106,6 +107,16 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    if(widget.task!=null){
+      date.controller.text = "${DateFormat.yMMMMEEEEd().format(widget.task!.dueDate)} (${DateFormat.jm().format(widget.task!.dueDate)})";
+      taskTitle.controller.text = widget.task!.text;
+      currentTaskColor = widget.task!.color;
+      _category = widget.task!.category;
+    }
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -113,8 +124,8 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
         backgroundColor: Colors.white,
-        title: const Text(
-          "New Task",
+        title: Text(
+          widget.task==null ? "New Task": "Edit Task",
           style: TextStyle(color: Colors.black),
         ),
         leading: IconButton(
@@ -275,6 +286,9 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                             return;
                           }
                           final createTask = Task(taskTitle.controller.text, false, storeDateTime, currentTaskColor, _category);
+                          if(widget.task!=null){
+                            Provider.of<TaskControllerProvider>(context, listen: false).removeTaskFromList(widget.task);
+                          }
                           Provider.of<TaskControllerProvider>(context, listen: false).addTaskToList(createTask);
                           Navigator.pop(context);
                         }catch(e){

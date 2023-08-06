@@ -107,6 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 style: TextStyle(color: Colors.white),
                               ),
                               onPressed: () {
+
                                 //TODO implement login authentication logic here
                                 Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
                               },
