@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:z_task_manager/screens/new_task.dart';
 import 'package:z_task_manager/services/task_controller_provider.dart';
 import '../../constants/constants.dart';
 import '../../structure/Task.dart';
@@ -61,10 +60,7 @@ class _TaskCardState extends State<TaskCard> {
                     minSize: 35,
                     color: Colors.black,
                     padding: EdgeInsets.zero,
-                    onPressed: () {
-                      Task newTask = Task(widget.taskData.text, widget.taskData.isCompleted,widget.taskData.dueDate,widget.taskData.color,widget.taskData.category);
-                      Navigator.push(context,MaterialPageRoute(builder: (_) => NewTaskScreen(newTask)));
-                    },
+                    onPressed: () {},
                     child: const Icon(Icons.edit_note),
                   ),
                 ],

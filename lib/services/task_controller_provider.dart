@@ -10,8 +10,8 @@ class TaskControllerProvider extends ChangeNotifier{
 
     TaskControllerProvider(){
         tasksList.add(Task("Task application", false, DateTime.now(), Colors.blue, CATEGORY.BASIC));
-        tasksList.add(Task("Testing purpose", true, DateTime.now(), Colors.yellow, CATEGORY.IMPORTANT));
-        tasksList.add(Task("Testing purpose", false, DateTime.utc(2023, 9, 4), Colors.greenAccent, CATEGORY.IMPORTANT));
+        tasksList.add(Task("Testing purpose", true, DateTime.now(), Colors.yellow, CATEGORY.BASIC));
+        tasksList.add(Task("Testing purpose", false, DateTime.utc(2023, 9, 4), Colors.greenAccent, CATEGORY.BASIC));
         tasksList.add(Task("General notes", false, DateTime.now(), Colors.greenAccent, CATEGORY.BASIC));
     }
 
@@ -19,17 +19,5 @@ class TaskControllerProvider extends ChangeNotifier{
         tasksList.add(task);
         notifyListeners();
         return true;
-    }
-
-    bool removeTaskFromList(Task? task){
-        if(task!=null){
-            tasksList.removeWhere((element) => element.text == task.text && element.dueDate == task.dueDate && element.category == task.category);
-            notifyListeners();
-            print(tasksList.length);
-            return true;
-        }
-        else {
-            return false;
-        }
     }
 }
