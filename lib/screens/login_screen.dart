@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:z_task_manager/constants/constants.dart';
-import 'package:z_task_manager/screens/home_screen.dart';
 import 'package:z_task_manager/screens/redirect.dart';
 import 'package:z_task_manager/screens/register_screen.dart';
 import 'package:z_task_manager/structure/TextFieldHandler.dart';
@@ -19,7 +17,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool _isLoading = true;
 
   Future<bool> signInWithEmailAndPassword() async{
     try{
@@ -131,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               onPressed: () async{
                                 if (await signInWithEmailAndPassword()){
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomeScreen()));
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const RedirectScreen()));
                                 }
                                 else{
                                   return;

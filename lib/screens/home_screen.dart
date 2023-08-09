@@ -51,9 +51,11 @@ class _HomeScreenState extends State<HomeScreen> {
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
         backgroundColor: Colors.white,
-        title: const Image(
-          image: AssetImage("assets/logos/backcaps.png"),
-          width: 100,
+        title: const Center(
+          child: Image(
+            image: AssetImage("assets/logos/backcaps.png"),
+            width: 100,
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

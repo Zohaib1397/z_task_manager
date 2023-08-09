@@ -30,7 +30,6 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   @override
   void dispose() {
     timer!.cancel();
-
     super.dispose();
   }
 
@@ -47,10 +46,16 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return isEmailVerified? const HomeScreen() : Scaffold(
+    return false? const HomeScreen() : Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
-        title: const Text("Email Verification"),
+        title: const Text("Email Verification",style: TextStyle(color: Colors.black),),
+        backgroundColor: Colors.white,
+      ),
+      body: Column(
+
       ),
     );
   }

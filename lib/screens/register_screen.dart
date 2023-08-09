@@ -6,7 +6,6 @@ import '../constants/constants.dart';
 import '../structure/TextFieldHandler.dart';
 import 'login_screen.dart';
 import '../constants/reusable_ui.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -167,7 +166,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (_) => const HomeScreen()));
+                                          builder: (_) => const RedirectScreen()));
 
                                 }else {
                                   return;
