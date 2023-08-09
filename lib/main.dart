@@ -4,6 +4,7 @@ import 'package:z_task_manager/firebase_options.dart';
 import 'package:z_task_manager/screens/home_screen.dart';
 import 'package:z_task_manager/screens/login_screen.dart';
 import 'package:z_task_manager/screens/new_task.dart';
+import 'package:z_task_manager/screens/redirect.dart';
 import 'package:z_task_manager/screens/register_screen.dart';
 import 'package:z_task_manager/screens/settings_screen.dart';
 import 'package:z_task_manager/services/task_controller_provider.dart';
@@ -28,16 +29,18 @@ class TaskManager extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.red
       ),
-      initialRoute: HomeScreen.id,
+      initialRoute: LoginScreen.id,
       routes:{
         HomeScreen.id : (context) => HomeScreen(),
         NewTaskScreen.id : (context) => NewTaskScreen(null),
         LoginScreen.id : (context) => LoginScreen(),
         RegisterScreen.id : (context) => RegisterScreen(),
         SettingsScreen.id : (context) => SettingsScreen(),
+        RedirectScreen.id : (context) => const RedirectScreen(),
       }
     );
   }

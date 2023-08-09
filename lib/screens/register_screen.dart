@@ -1,7 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:z_task_manager/screens/home_screen.dart';
+import 'package:z_task_manager/screens/redirect.dart';
 import '../constants/constants.dart';
+import '../structure/TextFieldHandler.dart';
 import 'login_screen.dart';
 import '../constants/reusable_ui.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -13,11 +18,34 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final _emailController = TextEditingController();
-  String password = "";
+  final _emailField = TextFieldHandler();
+  final _passwordField = TextFieldHandler();
+  final _confirmPasswordField = TextFieldHandler();
+  final _username = TextFieldHandler();
   bool isPasswordVisible = true;
   bool isConfirmPasswordVisible = true;
-  String confirmPassword = "";
+
+  final _auth = FirebaseAuth.instance;
+
+  Future<bool> createAccountWithEmailAndPassword() async {
+    try {
+      showDialog(
+        context: context,
+        builder: (_) => const CustomLoadingIndicator(),
+      );
+      await _auth.createUserWithEmailAndPassword(
+          email: _emailField.controller.text,
+          password: _passwordField.controller.text);
+      await _auth.currentUser?.updateDisplayName(_username.controller.text);
+      return true;
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _emailField.errorText = e.toString();
+        Navigator.pop(context);
+      });
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           TextField(
+                            controller: _username.controller,
                             decoration: kTaskManagerDecoration.copyWith(
                               hintText: "Enter full name",
                               prefixIcon: const Icon(Icons.person),
@@ -62,17 +91,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           TextField(
-                            controller: _emailController,
+                            controller: _emailField.controller,
                             keyboardType: TextInputType.emailAddress,
                             decoration: kTaskManagerDecoration.copyWith(
                               hintText: "Enter email address",
                               prefixIcon: const Icon(Icons.email),
-                              suffixText: ".com",
                               errorText: "",
                             ),
                           ),
                           TextField(
                             obscureText: isPasswordVisible,
+                            controller: _passwordField.controller,
                             decoration: kTaskManagerDecoration.copyWith(
                               hintText: "Enter password",
                               prefixIcon: const Icon(Icons.lock),
@@ -90,16 +119,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 },
                               ),
                             ),
-                            onChanged: (value) => setState(() {
-                              password = value;
-                            }),
                           ),
                           TextField(
                             obscureText: isConfirmPasswordVisible,
+                            controller: _confirmPasswordField.controller,
                             decoration: kTaskManagerDecoration.copyWith(
                               hintText: "Confirm password",
                               prefixIcon: const Icon(Icons.password),
-                              errorText: password == confirmPassword
+                              errorText: _passwordField.controller.text ==
+                                      _confirmPasswordField.controller.text
                                   ? ""
                                   : "Password doesn't match",
                               suffixIcon: IconButton(
@@ -116,9 +144,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 },
                               ),
                             ),
-                            onChanged: (value) => setState(() {
-                              confirmPassword = value;
-                            }),
                           ),
                         ],
                       ),
@@ -137,8 +162,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 "Signup",
                                 style: TextStyle(color: Colors.white),
                               ),
-                              onPressed: () {
-                                //TODO implement Login action
+                              onPressed: () async {
+                                if(await createAccountWithEmailAndPassword()){
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => const HomeScreen()));
+
+                                }else {
+                                  return;
+                                }
                               },
                             ),
                           ),

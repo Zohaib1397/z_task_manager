@@ -1,4 +1,6 @@
 # This is a generated file; do not edit or check into version control.
+cloud_firestore=/Users/MacBookPro/.pub-cache/hosted/pub.dev/cloud_firestore-4.8.4/
+cloud_firestore_web=/Users/MacBookPro/.pub-cache/hosted/pub.dev/cloud_firestore_web-3.6.3/
 firebase_auth=/Users/MacBookPro/.pub-cache/hosted/pub.dev/firebase_auth-4.7.2/
 firebase_auth_web=/Users/MacBookPro/.pub-cache/hosted/pub.dev/firebase_auth_web-5.6.2/
 firebase_core=/Users/MacBookPro/.pub-cache/hosted/pub.dev/firebase_core-2.15.0/

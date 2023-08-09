@@ -7,6 +7,7 @@ import 'package:z_task_manager/services/task_controller_provider.dart';
 import '../structure/CATEGORY.dart';
 import '../structure/Task.dart';
 import '../structure/TextFieldHandler.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'widgets/TaskCard.dart';
 
 import 'new_task.dart';
@@ -21,6 +22,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  final _auth = FirebaseAuth.instance;
+
   FILTER filter = FILTER.TODAY;
   bool searchToggle = false;
   TextFieldHandler searchField = TextFieldHandler();
@@ -32,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     return Scaffold(
       backgroundColor: Colors.white,
+      drawer: Drawer(),
       appBar: AppBar(
         scrolledUnderElevation: 10,
         actions: [
@@ -51,7 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
           width: 100,
         ),
       ),
-      drawer: Drawer(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
@@ -82,11 +86,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     AnimatedOpacity(
                       opacity: searchToggle ? 0 : 1.0,
                       duration: const Duration(milliseconds: 100),
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Welcome Back!"),
-                          Text(
+                          Text("Welcome Back ${_auth.currentUser!.email}!"),
+                          const Text(
                             "Here's Update Today",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,

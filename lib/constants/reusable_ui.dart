@@ -71,3 +71,23 @@ class RoundedCategoryButton extends StatelessWidget {
   }
 }
 
+class CustomLoadingIndicator extends StatelessWidget {
+  const CustomLoadingIndicator({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        padding:
+        const EdgeInsets.all(40),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius:
+          BorderRadius.circular(10),
+        ),
+        child:
+        const CircularProgressIndicator(),
+      ),
+    );
+  }
+}

@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:z_task_manager/constants/constants.dart';
 import 'package:z_task_manager/screens/home_screen.dart';
+import 'package:z_task_manager/screens/redirect.dart';
 import 'package:z_task_manager/screens/register_screen.dart';
+import 'package:z_task_manager/structure/TextFieldHandler.dart';
 import '../constants/reusable_ui.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,8 +19,27 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _emailController = TextEditingController();
-  String password = "";
+  bool _isLoading = true;
+
+  Future<bool> signInWithEmailAndPassword() async{
+    try{
+      showDialog(
+        context: context,
+        builder: (_) => CustomLoadingIndicator()
+      );
+      await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailField.controller.text, password: _passwordField.controller.text);
+      return true;
+    }on FirebaseAuthException catch(e){
+      setState(() {
+        _passwordField.errorText = e.toString();
+        Navigator.pop(context);
+      });
+      return false;
+    }
+  }
+
+  final _emailField = TextFieldHandler();
+  final _passwordField = TextFieldHandler();
   bool isPasswordVisible = true;
 
   @override
@@ -54,21 +78,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           TextField(
-                            controller: _emailController,
+                            controller: _emailField.controller,
                             keyboardType: TextInputType.emailAddress,
                             decoration: kTaskManagerDecoration.copyWith(
                               hintText: "Enter email address",
                               prefixIcon: const Icon(Icons.email),
-                              suffixText: ".com",
-                              errorText: "",
+                              errorText: _emailField.errorText,
                             ),
                           ),
                           TextField(
+                            controller: _passwordField.controller,
                             obscureText: isPasswordVisible,
                             decoration: kTaskManagerDecoration.copyWith(
                               hintText: "Enter password",
                               prefixIcon: const Icon(Icons.lock),
-                              errorText: "",
+                              errorText: _passwordField.errorText,
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   isPasswordVisible
@@ -82,7 +106,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 },
                               ),
                             ),
-                            onChanged: (value) => password = value,
                           ),
                           TextButton(
                             onPressed: () => setState(
@@ -106,10 +129,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 "Login",
                                 style: TextStyle(color: Colors.white),
                               ),
-                              onPressed: () {
-
-                                //TODO implement login authentication logic here
-                                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+                              onPressed: () async{
+                                if (await signInWithEmailAndPassword()){
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomeScreen()));
+                                }
+                                else{
+                                  return;
+                                }
                               },
                             ),
                           ),
@@ -145,13 +171,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               //TODO Implement Google Login
                             },
                           ),
-                          RoundIconButton(
+                          Platform.isIOS ? RoundIconButton(
                             backgroundColor: Colors.black,
                             image: const AssetImage("assets/logos/apple.png"),
                             onPressed: () {
                               //TODO implement Apple Login
                             },
-                          ),
+                          ): Container(),
                           RoundIconButton(
                             backgroundColor: const Color(0xff3c5a9a),
                             image:
