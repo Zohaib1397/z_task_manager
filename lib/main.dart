@@ -41,7 +41,7 @@ class TaskManager extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red
       ),
-      initialRoute: LoginScreen.id,
+      initialRoute: RedirectScreen.id,
       routes:{
         HomeScreen.id : (context) => const HomeScreen(),
         NewTaskScreen.id : (context) => const NewTaskScreen(),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:z_task_manager/constants/constants.dart';
+import 'package:z_task_manager/screens/login_screen.dart';
 import 'package:z_task_manager/services/task_controller_provider.dart';
 import '../structure/CATEGORY.dart';
 import '../structure/Task.dart';
@@ -22,7 +23,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   final _auth = FirebaseAuth.instance;
 
   FILTER filter = FILTER.TODAY;
@@ -31,24 +31,67 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if(!searchToggle){
+    if (!searchToggle) {
       searchField.controller.text = "";
     }
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
         backgroundColor: Colors.white,
-        drawer: Drawer(),
         appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              _auth.signOut();
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()));
+            },
+            icon: const Icon(Icons.logout),
+          ),
           scrolledUnderElevation: 10,
           actions: [
-            IconButton(
-              icon: Image(
-                image: AssetImage("assets/icons/profile.png"),
-                width: 30,
-              ),
-              onPressed: () {},
-            ),
+            PopupMenuButton(
+                onSelected: (value){
+                  print(value as int);
+                },
+                padding: EdgeInsets.zero,
+                itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: 1,
+                        child: GestureDetector(
+                          child: const Row(
+                            children: [
+                              Icon(
+                                Icons.delete,
+                                color: Colors.black,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text("Delete",
+                                  style: TextStyle(color: Colors.black)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: 2,
+                        child: GestureDetector(
+                          child: const Row(
+                            children: [
+                              Icon(
+                                Icons.info_outline,
+                                color: Colors.black,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text("About",
+                                  style: TextStyle(color: Colors.black)),
+                            ],
+                          ),
+                        ),
+                      )
+                    ]),
           ],
           iconTheme: IconThemeData(color: Colors.black),
           elevation: 0,
@@ -93,7 +136,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Welcome Back ${_auth.currentUser!.displayName}!"),
+                            Text(
+                                "Welcome Back ${_auth.currentUser!.displayName}!"),
                             const Text(
                               "Here's Update Today",
                               style: TextStyle(
@@ -150,10 +194,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             hintText: "Search..",
                                             fillColor: Colors.transparent,
                                           ),
-                                          onChanged: (value){
-                                            setState(() {
-
-                                            });
+                                          onChanged: (value) {
+                                            setState(() {});
                                           },
                                         ),
                                       )
@@ -212,13 +254,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         ]),
                   ),
                 ),
+                Divider(),
                 Consumer<TaskControllerProvider>(
                   builder: (context, taskController, _) {
                     List<Task> taskList = [];
                     if (searchField.controller.text != "") {
                       taskList = taskController.tasksList
-                          .where((element) =>
-                              element.text.contains(searchField.controller.text))
+                          .where((element) => element.text
+                              .contains(searchField.controller.text))
                           .toList();
                     } else {
                       taskList = taskController.tasksList;
@@ -250,6 +293,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           .toList();
                     }
 
+                    // return taskList.isEmpty? Center(
+                    //   child: Column(
+                    //     mainAxisAlignment: MainAxisAlignment.center,
+                    //     children: [
+                    //       Image(image: AssetImage("assets/icons/empty_folder.png"),
+                    //         width: 150,
+                    //       ),
+                    //       const Text("Nothing found here"),
+                    //     ],
+                    //   ),
+                    // ) :
                     return Column(
                       children: cardsList,
                     );

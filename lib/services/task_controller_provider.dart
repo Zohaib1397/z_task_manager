@@ -17,7 +17,6 @@ class TaskControllerProvider extends ChangeNotifier{
     Future<void> tasksFromHandler()async{
         tasksList = await taskHandler.getAllTasks();
         notifyListeners();
-
     }
 
 
