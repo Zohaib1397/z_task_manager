@@ -86,7 +86,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             decoration: kTaskManagerDecoration.copyWith(
                               hintText: "Enter full name",
                               prefixIcon: const Icon(Icons.person),
-                              errorText: "",
+                              errorText: _username.errorText,
                             ),
                           ),
                           TextField(
@@ -95,7 +95,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             decoration: kTaskManagerDecoration.copyWith(
                               hintText: "Enter email address",
                               prefixIcon: const Icon(Icons.email),
-                              errorText: "",
+                              errorText: _emailField.errorText,
                             ),
                           ),
                           TextField(
@@ -104,7 +104,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             decoration: kTaskManagerDecoration.copyWith(
                               hintText: "Enter password",
                               prefixIcon: const Icon(Icons.lock),
-                              errorText: "",
+                              errorText: _passwordField.errorText,
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   isPasswordVisible
@@ -118,6 +118,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 },
                               ),
                             ),
+                            onChanged: (value) => setState((){
+                              _confirmPasswordField.errorText = "";
+                              _passwordField.errorText = "";
+                            }),
                           ),
                           TextField(
                             obscureText: isConfirmPasswordVisible,
@@ -125,10 +129,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             decoration: kTaskManagerDecoration.copyWith(
                               hintText: "Confirm password",
                               prefixIcon: const Icon(Icons.password),
-                              errorText: _passwordField.controller.text ==
-                                      _confirmPasswordField.controller.text
-                                  ? ""
-                                  : "Password doesn't match",
+                              errorText: _confirmPasswordField.errorText,
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   isConfirmPasswordVisible
@@ -162,6 +163,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 style: TextStyle(color: Colors.white),
                               ),
                               onPressed: () async {
+                                if(_emailField.controller.text.isEmpty || _username.controller.text.isEmpty || _passwordField.controller.text.isEmpty){
+                                  if(_emailField.controller.text.isEmpty){
+                                    setState(() {
+                                      _emailField.errorText = "Email is required";
+                                    });
+                                  }
+                                  if(_username.controller.text.isEmpty){
+                                    setState(() {
+                                      _username.errorText = "Name is required";
+                                    });
+                                  }
+                                  if( _passwordField.controller.text.isEmpty){
+                                    setState(() {
+                                      _passwordField.errorText="Password is required";
+                                    });
+                                  }
+                                  if(_confirmPasswordField.controller.text.isEmpty){
+                                    setState(() {
+                                      _confirmPasswordField.errorText = "Password didn't match";
+                                    });
+                                  }
+                                  return;
+                                }
+                                if(_passwordField.controller.text != _confirmPasswordField.controller.text){
+                                  setState(() {
+                                    _confirmPasswordField.errorText = "Password didn't match";
+                                  });
+                                  return;
+                                }
                                 if(await createAccountWithEmailAndPassword()){
                                   Navigator.pushReplacement(
                                       context,

@@ -34,229 +34,232 @@ class _HomeScreenState extends State<HomeScreen> {
     if(!searchToggle){
       searchField.controller.text = "";
     }
-    return Scaffold(
-      backgroundColor: Colors.white,
-      drawer: Drawer(),
-      appBar: AppBar(
-        scrolledUnderElevation: 10,
-        actions: [
-          IconButton(
-            icon: Image(
-              image: AssetImage("assets/icons/profile.png"),
-              width: 30,
-            ),
-            onPressed: () {},
-          ),
-        ],
-        iconTheme: IconThemeData(color: Colors.black),
-        elevation: 0,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
         backgroundColor: Colors.white,
-        title: const Center(
-          child: Image(
-            image: AssetImage("assets/logos/backcaps.png"),
-            width: 100,
+        drawer: Drawer(),
+        appBar: AppBar(
+          scrolledUnderElevation: 10,
+          actions: [
+            IconButton(
+              icon: Image(
+                image: AssetImage("assets/icons/profile.png"),
+                width: 30,
+              ),
+              onPressed: () {},
+            ),
+          ],
+          iconTheme: IconThemeData(color: Colors.black),
+          elevation: 0,
+          backgroundColor: Colors.white,
+          title: const Center(
+            child: Image(
+              image: AssetImage("assets/logos/backcaps.png"),
+              width: 100,
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          setState(() {
-            Navigator.pushNamed(context, NewTaskScreen.id);
-            // Navigator.pushNamed(context, NewTaskScreen.id);
-            //Previously I was using bottom sheet widget
-            // showModalBottomSheet(context: context, showDragHandle: true, shape: RoundedRectangleBorder(
-            //   borderRadius: BorderRadius.circular(kBottomSheetRoundedCorners),
-            // ), builder: (BuildContext context){
-            //   return NewTaskScreen();
-            // });
-          });
-        },
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: ListView(
-            shrinkWrap: true,
-            physics: ClampingScrollPhysics(),
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(11.0),
-                child: Stack(
-                  alignment: Alignment.centerLeft,
-                  children: [
-                    AnimatedOpacity(
-                      opacity: searchToggle ? 0 : 1.0,
-                      duration: const Duration(milliseconds: 100),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Welcome Back ${_auth.currentUser!.email}!"),
-                          const Text(
-                            "Here's Update Today",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            setState(() {
+              Navigator.pushNamed(context, NewTaskScreen.id);
+              // Navigator.pushNamed(context, NewTaskScreen.id);
+              //Previously I was using bottom sheet widget
+              // showModalBottomSheet(context: context, showDragHandle: true, shape: RoundedRectangleBorder(
+              //   borderRadius: BorderRadius.circular(kBottomSheetRoundedCorners),
+              // ), builder: (BuildContext context){
+              //   return NewTaskScreen();
+              // });
+            });
+          },
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: ListView(
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(11.0),
+                  child: Stack(
+                    alignment: Alignment.centerLeft,
+                    children: [
+                      AnimatedOpacity(
+                        opacity: searchToggle ? 0 : 1.0,
+                        duration: const Duration(milliseconds: 100),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Welcome Back ${_auth.currentUser!.displayName}!"),
+                            const Text(
+                              "Here's Update Today",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Material(
+                          elevation: searchToggle ? 10 : 0,
+                          color: searchToggle ? Colors.white : Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: AnimatedContainer(
+                            width: searchToggle
+                                ? MediaQuery.of(context).size.width
+                                : 40,
+                            duration: const Duration(milliseconds: 200),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: IconButton(
+                                    visualDensity: VisualDensity.compact,
+                                    padding: EdgeInsets.zero,
+                                    icon: Icon(
+                                      Icons.search,
+                                      color: searchToggle
+                                          ? Colors.black
+                                          : Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        searchToggle = !searchToggle;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                searchToggle
+                                    ? Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 30.0),
+                                        child: TextField(
+                                          controller: searchField.controller,
+                                          autofocus: true,
+                                          decoration:
+                                              kTaskManagerDecoration.copyWith(
+                                            hintText: "Search..",
+                                            fillColor: Colors.transparent,
+                                          ),
+                                          onChanged: (value){
+                                            setState(() {
+
+                                            });
+                                          },
+                                        ),
+                                      )
+                                    : Container(),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Material(
-                        elevation: searchToggle ? 10 : 0,
-                        color: searchToggle ? Colors.white : Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
                         ),
-                        child: AnimatedContainer(
-                          width: searchToggle
-                              ? MediaQuery.of(context).size.width
-                              : 40,
-                          duration: const Duration(milliseconds: 200),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                child: IconButton(
-                                  visualDensity: VisualDensity.compact,
-                                  padding: EdgeInsets.zero,
-                                  icon: Icon(
-                                    Icons.search,
-                                    color: searchToggle
-                                        ? Colors.black
-                                        : Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      searchToggle = !searchToggle;
-                                    });
-                                  },
-                                ),
-                              ),
-                              searchToggle
-                                  ? Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 30.0),
-                                      child: TextField(
-                                        controller: searchField.controller,
-                                        autofocus: true,
-                                        decoration:
-                                            kTaskManagerDecoration.copyWith(
-                                          hintText: "Search..",
-                                          fillColor: Colors.transparent,
-                                        ),
-                                        onChanged: (value){
-                                          setState(() {
-
-                                          });
-                                        },
-                                      ),
-                                    )
-                                  : Container(),
-                            ],
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: DefaultTabController(
+                    length: 3,
+                    child: TabBar(
+                        onTap: (index) {
+                          setState(() {
+                            if (index == 0) {
+                              filter = FILTER.TODAY;
+                            } else if (index == 1) {
+                              filter = FILTER.UPCOMING;
+                            } else if (index == 2) {
+                              filter = FILTER.DONE;
+                            } else {
+                              print("Something went wrong");
+                            }
+                          });
+                        },
+                        unselectedLabelColor: Colors.black,
+                        indicator: const BoxDecoration(
+                          color: Colors.black,
+                          borderRadius:
+                              BorderRadius.all(Radius.elliptical(20, 20)),
+                        ),
+                        labelStyle: const TextStyle(
+                          color: Colors.white,
+                        ),
+                        indicatorColor: Colors.black,
+                        splashBorderRadius:
+                            const BorderRadius.all(Radius.elliptical(20, 20)),
+                        tabs: const [
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 14.0),
+                            child: Text("Today"),
                           ),
-                        ),
-                      ),
-                    ),
-                  ],
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 14.0),
+                            child: Text("Upcoming"),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 14.0),
+                            child: Text("Done"),
+                          ),
+                        ]),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: DefaultTabController(
-                  length: 3,
-                  child: TabBar(
-                      onTap: (index) {
-                        setState(() {
-                          if (index == 0) {
-                            filter = FILTER.TODAY;
-                          } else if (index == 1) {
-                            filter = FILTER.UPCOMING;
-                          } else if (index == 2) {
-                            filter = FILTER.DONE;
-                          } else {
-                            print("Something went wrong");
-                          }
-                        });
-                      },
-                      unselectedLabelColor: Colors.black,
-                      indicator: const BoxDecoration(
-                        color: Colors.black,
-                        borderRadius:
-                            BorderRadius.all(Radius.elliptical(20, 20)),
-                      ),
-                      labelStyle: const TextStyle(
-                        color: Colors.white,
-                      ),
-                      indicatorColor: Colors.black,
-                      splashBorderRadius:
-                          const BorderRadius.all(Radius.elliptical(20, 20)),
-                      tabs: const [
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 14.0),
-                          child: Text("Today"),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 14.0),
-                          child: Text("Upcoming"),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 14.0),
-                          child: Text("Done"),
-                        ),
-                      ]),
+                Consumer<TaskControllerProvider>(
+                  builder: (context, taskController, _) {
+                    List<Task> taskList = [];
+                    if (searchField.controller.text != "") {
+                      taskList = taskController.tasksList
+                          .where((element) =>
+                              element.text.contains(searchField.controller.text))
+                          .toList();
+                    } else {
+                      taskList = taskController.tasksList;
+                    }
+
+                    List<Widget> cardsList = [];
+                    if (filter == FILTER.TODAY) {
+                      cardsList = taskList
+                          .where((element) =>
+                              element.dueDate.day == DateTime.now().day &&
+                              element.isCompleted == false)
+                          .map((task) => TaskCard(
+                                taskData: task,
+                              ))
+                          .toList();
+                    } else if (filter == FILTER.UPCOMING) {
+                      cardsList = taskList
+                          .where((element) =>
+                              element.dueDate.day > DateTime.now().day &&
+                              element.isCompleted == false)
+                          .map((task) => TaskCard(
+                                taskData: task,
+                              ))
+                          .toList();
+                    } else if (filter == FILTER.DONE) {
+                      cardsList = taskList
+                          .where((e) => e.isCompleted)
+                          .map((e) => TaskCard(taskData: e))
+                          .toList();
+                    }
+
+                    return Column(
+                      children: cardsList,
+                    );
+                  },
                 ),
-              ),
-              Consumer<TaskControllerProvider>(
-                builder: (context, taskController, _) {
-                  List<Task> taskList = [];
-                  if (searchField.controller.text != "") {
-                    taskList = taskController.tasksList
-                        .where((element) =>
-                            element.text.contains(searchField.controller.text))
-                        .toList();
-                  } else {
-                    taskList = taskController.tasksList;
-                  }
-
-                  List<Widget> cardsList = [];
-                  if (filter == FILTER.TODAY) {
-                    cardsList = taskList
-                        .where((element) =>
-                            element.dueDate.day == DateTime.now().day &&
-                            element.isCompleted == false)
-                        .map((task) => TaskCard(
-                              taskData: task,
-                            ))
-                        .toList();
-                  } else if (filter == FILTER.UPCOMING) {
-                    cardsList = taskList
-                        .where((element) =>
-                            element.dueDate.day > DateTime.now().day &&
-                            element.isCompleted == false)
-                        .map((task) => TaskCard(
-                              taskData: task,
-                            ))
-                        .toList();
-                  } else if (filter == FILTER.DONE) {
-                    cardsList = taskList
-                        .where((e) => e.isCompleted)
-                        .map((e) => TaskCard(taskData: e))
-                        .toList();
-                  }
-
-                  return Column(
-                    children: cardsList,
-                  );
-                },
-              ),
-              SizedBox(
-                height: 80,
-              ),
-            ],
+                SizedBox(
+                  height: 80,
+                ),
+              ],
+            ),
           ),
         ),
       ),

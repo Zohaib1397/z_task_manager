@@ -15,6 +15,11 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   bool isEmailVerified = false;
   final _auth = FirebaseAuth.instance;
   Timer? timer;
+  bool isResendButtonActive = false;
+  double defaultBodyFontSize = 16.0;
+  Timer? countDownTimer;
+  int countDownDuration = 60;
+  int _currentTickerValue = 0;
 
   @override
   void initState() {
@@ -22,6 +27,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
     isEmailVerified = _auth.currentUser!.emailVerified;
 
+    toggleCountDownTimer();
     if (!isEmailVerified) {
       sendVerificationEmail();
 
@@ -30,8 +36,24 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     }
   }
 
+  void toggleCountDownTimer(){
+    _currentTickerValue = countDownDuration;
+    countDownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if(_currentTickerValue > 0){
+        setState(() {
+          _currentTickerValue--;
+        });
+      }else {
+        setState(() {
+          countDownTimer!.cancel();
+          isResendButtonActive = true;
+        });
+      }
+    });
+  }
   @override
   void dispose() {
+    countDownTimer!.cancel();
     timer!.cancel();
     super.dispose();
   }
@@ -54,7 +76,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return false
+    return isEmailVerified
         ? const HomeScreen()
         : Scaffold(
             backgroundColor: Colors.white,
@@ -71,16 +93,55 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.email_outlined,size: 100,),
-                  Text("Please verify your email before login"),
+                  const Image(
+                    image: AssetImage("assets/icons/mail.png"),
+                    width: 150,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text.rich(
+                    TextSpan(
+                      text: "An email has been sent to ",
+                      style: TextStyle(
+                        fontSize: defaultBodyFontSize,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: '${_auth.currentUser!.email}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold, // Add bold style
+                          ),
+                        ),
+                        const TextSpan(
+                            text:
+                                ".\n To be able to login, you need to verify\n your email first."),
+                      ],
+                    ),
+                    textAlign: TextAlign.center,
+                    textWidthBasis: TextWidthBasis.longestLine,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   MaterialButton(
+                    disabledColor: Colors.black26,
                     color: Theme.of(context).primaryColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    onPressed: () {},
-                    child: Text("Resend Verification Link",style: TextStyle(color: Colors.white),),
+                    onPressed: isResendButtonActive? (){
+                      setState(() {
+                        isResendButtonActive = false;
+                        toggleCountDownTimer();
+                      });
+                    } : null,
+                    child: const Text(
+                      "Resend Verification Link",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
+                  Text(isResendButtonActive? "" :"Resend in: ${_currentTickerValue.toString().padLeft(2,'0')}s"),
                 ],
               ),
             ),

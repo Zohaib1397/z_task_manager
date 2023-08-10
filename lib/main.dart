@@ -36,16 +36,15 @@ class TaskManager extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red
       ),
-      home: EmailVerificationScreen(),
-      // initialRoute: LoginScreen.id,
-      // routes:{
-      //   HomeScreen.id : (context) => HomeScreen(),
-      //   NewTaskScreen.id : (context) => NewTaskScreen(),
-      //   LoginScreen.id : (context) => LoginScreen(),
-      //   RegisterScreen.id : (context) => RegisterScreen(),
-      //   SettingsScreen.id : (context) => SettingsScreen(),
-      //   RedirectScreen.id : (context) => const RedirectScreen(),
-      // }
+      initialRoute: LoginScreen.id,
+      routes:{
+        HomeScreen.id : (context) => HomeScreen(),
+        NewTaskScreen.id : (context) => NewTaskScreen(),
+        LoginScreen.id : (context) => LoginScreen(),
+        RegisterScreen.id : (context) => RegisterScreen(),
+        SettingsScreen.id : (context) => SettingsScreen(),
+        RedirectScreen.id : (context) => const RedirectScreen(),
+      }
     );
   }
 }
