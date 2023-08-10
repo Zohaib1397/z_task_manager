@@ -8,6 +8,7 @@ import 'package:z_task_manager/screens/new_task.dart';
 import 'package:z_task_manager/screens/redirect.dart';
 import 'package:z_task_manager/screens/register_screen.dart';
 import 'package:z_task_manager/screens/settings_screen.dart';
+import 'package:z_task_manager/services/google_sign_in_provider.dart';
 import 'package:z_task_manager/services/task_controller_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -23,6 +24,9 @@ void main() async {
             ChangeNotifierProvider(
               create: (context) => TaskControllerProvider(),
             ),
+          //   ChangeNotifierProvider(
+          //     create: (context) => GoogleSignInProvider(),
+          //   ),
           ],
           child: const TaskManager(),
       ));
@@ -39,11 +43,11 @@ class TaskManager extends StatelessWidget {
       ),
       initialRoute: LoginScreen.id,
       routes:{
-        HomeScreen.id : (context) => HomeScreen(),
-        NewTaskScreen.id : (context) => NewTaskScreen(),
-        LoginScreen.id : (context) => LoginScreen(),
-        RegisterScreen.id : (context) => RegisterScreen(),
-        SettingsScreen.id : (context) => SettingsScreen(),
+        HomeScreen.id : (context) => const HomeScreen(),
+        NewTaskScreen.id : (context) => const NewTaskScreen(),
+        LoginScreen.id : (context) => const LoginScreen(),
+        RegisterScreen.id : (context) => const RegisterScreen(),
+        SettingsScreen.id : (context) => const SettingsScreen(),
         RedirectScreen.id : (context) => const RedirectScreen(),
         ForgetPasswordScreen.id : (context) => const ForgetPasswordScreen(),
       }

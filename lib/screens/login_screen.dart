@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:z_task_manager/constants/constants.dart';
 import 'package:z_task_manager/screens/ForgetPasswordScreen.dart';
 import 'package:z_task_manager/screens/redirect.dart';
@@ -7,6 +8,8 @@ import 'package:z_task_manager/screens/register_screen.dart';
 import 'package:z_task_manager/structure/TextFieldHandler.dart';
 import '../constants/reusable_ui.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../services/google_sign_in_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -140,52 +143,53 @@ class _LoginScreenState extends State<LoginScreen> {
                           //TODO add fingerprint login button
                         ],
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Text("Or Login with"),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Container(
-                        height: 1,
-                        decoration: const BoxDecoration(
-                          gradient: RadialGradient(radius: 150, colors: [
-                            Colors.black,
-                            Colors.white,
-                          ]),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          RoundIconButton(
-                            backgroundColor: Colors.white,
-                            image: const AssetImage("assets/logos/google.png"),
-                            onPressed: () {
-                              //TODO Implement Google Login
-                            },
-                          ),
-                          Platform.isIOS ? RoundIconButton(
-                            backgroundColor: Colors.black,
-                            image: const AssetImage("assets/logos/apple.png"),
-                            onPressed: () {
-                              //TODO implement Apple Login
-                            },
-                          ): Container(),
-                          RoundIconButton(
-                            backgroundColor: const Color(0xff3c5a9a),
-                            image:
-                                const AssetImage("assets/logos/facebook.png"),
-                            onPressed: () {
-                              //TODO Implement Facebook Login
-                            },
-                          )
-                        ],
-                      ),
+                      // const SizedBox(
+                      //   height: 10,
+                      // ),
+                      // const Text("Or Login with"),
+                      // const SizedBox(
+                      //   height: 5,
+                      // ),
+                      // Container(
+                      //   height: 1,
+                      //   decoration: const BoxDecoration(
+                      //     gradient: RadialGradient(radius: 150, colors: [
+                      //       Colors.black,
+                      //       Colors.white,
+                      //     ]),
+                      //   ),
+                      // ),
+                      // const SizedBox(
+                      //   height: 5,
+                      // ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     RoundIconButton(
+                      //       backgroundColor: Colors.white,
+                      //       image: const AssetImage("assets/logos/google.png"),
+                      //       onPressed: (){
+                      //         // final user = Provider.of<GoogleSignInProvider>(context, listen: false);
+                      //         // user.googleSignIn;
+                      //       },
+                      //     ),
+                      //     Platform.isIOS ? RoundIconButton(
+                      //       backgroundColor: Colors.black,
+                      //       image: const AssetImage("assets/logos/apple.png"),
+                      //       onPressed: () {
+                      //         //TODO implement Apple Login
+                      //       },
+                      //     ): Container(),
+                      //     RoundIconButton(
+                      //       backgroundColor: const Color(0xff3c5a9a),
+                      //       image:
+                      //           const AssetImage("assets/logos/facebook.png"),
+                      //       onPressed: () {
+                      //         //TODO Implement Facebook Login
+                      //       },
+                      //     )
+                      //   ],
+                      // ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -197,6 +201,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                           )
                         ],
+                      ),
+                      const SizedBox(
+                        height: 10,
                       ),
                     ],
                   ),
