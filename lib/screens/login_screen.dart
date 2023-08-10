@@ -22,6 +22,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
+
+
   Future<bool> signInWithEmailAndPassword() async{
     try{
       showDialog(
@@ -43,6 +45,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordField = TextFieldHandler();
   bool isPasswordVisible = true;
 
+  @override
+  void initState() {
+    super.initState();
+    _emailField.controller.text = "zohaib.ahmed1397@gmail.com";
+    _passwordField.controller.text = "654321";
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,7 +1,7 @@
 abstract class DAO<T> {
-  bool createTask(task);
-  T searchTask(title);
-  List<T> getAllTasks();
-  bool updateTask(task);
-  bool deleteTask(task);
+  bool createTask(T task);
+  T searchTask(String title);
+  Future<List<T>> getAllTasks();
+  bool updateTask(T task);
+  bool deleteTask(T task);
 }
