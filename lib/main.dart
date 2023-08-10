@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:z_task_manager/screens/EmailVerificationScreen.dart';
+import 'package:z_task_manager/screens/ForgetPasswordScreen.dart';
 import 'package:z_task_manager/screens/home_screen.dart';
 import 'package:z_task_manager/screens/login_screen.dart';
 import 'package:z_task_manager/screens/new_task.dart';
@@ -44,6 +45,7 @@ class TaskManager extends StatelessWidget {
         RegisterScreen.id : (context) => RegisterScreen(),
         SettingsScreen.id : (context) => SettingsScreen(),
         RedirectScreen.id : (context) => const RedirectScreen(),
+        ForgetPasswordScreen.id : (context) => const ForgetPasswordScreen(),
       }
     );
   }

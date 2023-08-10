@@ -259,7 +259,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           TextButton(
                             child: const Text("Login"),
                             onPressed: () {
-                              Navigator.pushNamed(context, LoginScreen.id);
+                              Navigator.pop(context);
                             },
                           )
                         ],

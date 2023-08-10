@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:z_task_manager/constants/constants.dart';
+import 'package:z_task_manager/screens/ForgetPasswordScreen.dart';
 import 'package:z_task_manager/screens/redirect.dart';
 import 'package:z_task_manager/screens/register_screen.dart';
 import 'package:z_task_manager/structure/TextFieldHandler.dart';
@@ -107,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           TextButton(
                             onPressed: () => setState(
                               () {
-                                //TODO implement Forget password here
+                                Navigator.pushNamed(context, ForgetPasswordScreen.id);
                               },
                             ),
                             child: const Text("Forget Password?"),
