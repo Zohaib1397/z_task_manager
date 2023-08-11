@@ -8,7 +8,6 @@ import 'package:z_task_manager/screens/new_task.dart';
 import 'package:z_task_manager/screens/redirect.dart';
 import 'package:z_task_manager/screens/register_screen.dart';
 import 'package:z_task_manager/screens/settings_screen.dart';
-import 'package:z_task_manager/services/google_sign_in_provider.dart';
 import 'package:z_task_manager/services/task_controller_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -20,15 +19,15 @@ void main() async {
   );
   runApp(
       MultiProvider(
-          providers: [
-            ChangeNotifierProvider(
-              create: (context) => TaskControllerProvider(),
-            ),
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => TaskControllerProvider(),
+          ),
           //   ChangeNotifierProvider(
           //     create: (context) => GoogleSignInProvider(),
           //   ),
-          ],
-          child: const TaskManager(),
+        ],
+        child: const TaskManager(),
       ));
 }
 

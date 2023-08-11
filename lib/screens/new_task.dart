@@ -108,9 +108,11 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   void initState() {
     super.initState();
     if(widget.task!=null){
+      currentTaskColor = widget.task!.color;
       taskTitle.controller.text = widget.task!.text;
       descriptionField.controller.text = widget.task!.description;
-      date.controller.text = DateFormat.yMMMMEEEEd().format(widget.task!.dueDate);
+      storeDateTime = widget.task!.dueDate;
+      date.controller.text = "${DateFormat.yMMMMEEEEd().format(widget.task!.dueDate)} (${DateFormat.jm().format(widget.task!.dueDate)})";
       _category = widget.task!.category;
     }
   }
@@ -340,11 +342,14 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                                       storeDateTime,
                                       currentTaskColor,
                                       _category);
-                                  Provider.of<TaskControllerProvider>(context,
-                                          listen: false)
-                                      .addTaskToList(createTask);
+                                  final provider = Provider.of<TaskControllerProvider>(context, listen: false);
+                                  if(widget.task!=null){
+                                    provider.removeTaskFromList(widget.task!);
+                                  }
+                                  provider.addTaskToList(createTask);
                                   Navigator.pop(context);
                                 } catch (e) {
+                                  print(e.toString());
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(content: Text("$e")));
                                 }

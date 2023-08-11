@@ -98,6 +98,7 @@ class TaskHandler implements TaskDAO {
         }
       }
       if (!completerCompleted) {
+        taskList.sort((a,b) => a.dueDate.compareTo(b.dueDate));
         completer.complete(taskList);
         completerCompleted = true; // Mark the completer as completed
       }

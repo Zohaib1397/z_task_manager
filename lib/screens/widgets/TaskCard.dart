@@ -21,8 +21,6 @@ class TaskCard extends StatefulWidget {
 
 class _TaskCardState extends State<TaskCard> {
 
-  bool _editButtonActive = false;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -128,7 +126,7 @@ class _TaskCardState extends State<TaskCard> {
           minSize: 35,
           color: Colors.black,
           padding: EdgeInsets.zero,
-          borderRadius: _editButtonActive? BorderRadius.all(Radius.circular(16.0)) : BorderRadius.all(Radius.circular(8.0)),
+          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
           onPressed: () {
             Navigator.push(
                 context,

@@ -30,6 +30,11 @@ class _HomeScreenState extends State<HomeScreen> {
   TextFieldHandler searchField = TextFieldHandler();
 
   @override
+  void initState() {
+    super.initState();
+    Provider.of<TaskControllerProvider>(context, listen: false).tasksFromHandler();
+  }
+  @override
   Widget build(BuildContext context) {
     if (!searchToggle) {
       searchField.controller.text = "";
@@ -41,8 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
-              Provider.of<TaskControllerProvider>(context, listen: false)
-                  .clearForDispose();
+              final provider = Provider.of<TaskControllerProvider>(context, listen: false);
+              provider.clearForDispose();
               _auth.signOut();
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => const LoginScreen()));
@@ -227,8 +232,10 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: DefaultTabController(
-                  length: 3,
+                  length: 4,
                   child: TabBar(
+                    padding: EdgeInsets.zero,
+                      labelPadding: EdgeInsets.zero,
                       onTap: (index) {
                         setState(() {
                           if (index == 0) {
@@ -237,6 +244,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             filter = FILTER.UPCOMING;
                           } else if (index == 2) {
                             filter = FILTER.DONE;
+                          } else if (index == 3){
+                            filter = FILTER.PASTDUE;
                           } else {
                             print("Something went wrong");
                           }
@@ -254,27 +263,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       indicatorColor: Colors.black,
                       splashBorderRadius:
                           const BorderRadius.all(Radius.elliptical(20, 20)),
-                      tabs: const [
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 14.0),
-                          child: Text("Today"),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 14.0),
-                          child: Text("Upcoming"),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 14.0),
-                          child: Text("Done"),
-                        ),
-                        // Padding(
-                        //   padding: EdgeInsets.symmetric(vertical: 14.0),
-                        //   child: Text("Uncompleted"),
-                        // ),
+                      tabs: [
+                        _buildTab("Today"),
+                        _buildTab("Upcoming"),
+                        _buildTab("Done"),
+                        _buildTab("Past Due"),
                       ]),
                 ),
               ),
-              Divider(),
+              const Divider(),
               Consumer<TaskControllerProvider>(
                 builder: (context, taskController, _) {
                   List<Task> taskList = [];
@@ -288,17 +285,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
 
                   List<Widget> cardsList = [];
+                  DateTime currentTime = DateTime.now();
                   if (filter == FILTER.TODAY) {
                     cardsList = taskList
                         .where((element) =>
-                            element.dueDate.day == DateTime.now().day &&
+                            element.dueDate.compareTo(currentTime)>0 &&
+                            element.dueDate.day == currentTime.day &&
                             element.isCompleted == false)
                         .map((task) => _buildDismissibleCard(task))
                         .toList();
                   } else if (filter == FILTER.UPCOMING) {
                     cardsList = taskList
                         .where((element) =>
-                            element.dueDate.day > DateTime.now().day &&
+                            element.dueDate.day > currentTime.day &&
                             element.isCompleted == false)
                         .map((task) => _buildDismissibleCard(task))
                         .toList();
@@ -306,6 +305,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     cardsList = taskList
                         .where((task) => task.isCompleted)
                         .map((task) => _buildDismissibleCard(task))
+                        .toList();
+                  } else if (filter == FILTER.PASTDUE){
+                    cardsList = taskList
+                        .where((task) => task.dueDate.compareTo(currentTime) < 0 &&
+                        !task.isCompleted)
+                        .map((task)=>_buildDismissibleCard(task))
                         .toList();
                   }
 
@@ -332,6 +337,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Padding _buildTab(String tabTitle) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Text(tabTitle, style: TextStyle(
+        fontSize: 13,
+      ),),
     );
   }
 

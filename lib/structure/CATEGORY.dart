@@ -7,5 +7,6 @@ enum CATEGORY{
 enum FILTER{
   TODAY,
   UPCOMING,
-  DONE
+  DONE,
+  PASTDUE,
 }

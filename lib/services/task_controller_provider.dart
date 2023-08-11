@@ -5,13 +5,13 @@ import 'package:z_task_manager/structure/CATEGORY.dart';
 import '../structure/Task.dart';
 
 class TaskControllerProvider extends ChangeNotifier{
-    //TODO create taskHandler object over here
     final taskHandler = TaskHandler();
 
     List<Task> tasksList = [];
 
     TaskControllerProvider(){
         tasksFromHandler();
+        // sortListBasedOnTime();
     }
 
     Future<void> tasksFromHandler()async{
@@ -24,10 +24,17 @@ class TaskControllerProvider extends ChangeNotifier{
         notifyListeners();
     }
 
+    void sortListBasedOnTime(){
+        tasksList.sort((a,b) => a.dueDate.compareTo(b.dueDate));
+        tasksList = tasksList.reversed.toList();
+        notifyListeners();
+    }
+
     bool removeTaskFromList(Task task){
         try{
             taskHandler.deleteTask(task);
             tasksList.remove(task);
+            // sortListBasedOnTime();
             notifyListeners();
             return true;
         }catch(e){
@@ -40,6 +47,7 @@ class TaskControllerProvider extends ChangeNotifier{
         try{
             taskHandler.createTask(task);
             tasksFromHandler();
+            // sortListBasedOnTime();
             notifyListeners();
             return true;
         }catch(e){
