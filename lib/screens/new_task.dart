@@ -105,6 +105,16 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    if(widget.task!=null){
+      taskTitle.controller.text = widget.task!.text;
+      descriptionField.controller.text = widget.task!.description;
+      date.controller.text = DateFormat.yMMMMEEEEd().format(widget.task!.dueDate);
+      _category = widget.task!.category;
+    }
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,

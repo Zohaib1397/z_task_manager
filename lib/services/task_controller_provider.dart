@@ -24,10 +24,27 @@ class TaskControllerProvider extends ChangeNotifier{
         notifyListeners();
     }
 
+    bool removeTaskFromList(Task task){
+        try{
+            taskHandler.deleteTask(task);
+            tasksList.remove(task);
+            notifyListeners();
+            return true;
+        }catch(e){
+            print(e.toString());
+            return false;
+        }
+    }
+
     bool addTaskToList(Task task){
-        taskHandler.createTask(task);
-        tasksList.add(task);
-        notifyListeners();
-        return true;
+        try{
+            taskHandler.createTask(task);
+            tasksFromHandler();
+            notifyListeners();
+            return true;
+        }catch(e){
+            print(e.toString());
+            return false;
+        }
     }
 }

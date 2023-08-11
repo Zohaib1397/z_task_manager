@@ -4,6 +4,7 @@ import 'CATEGORY.dart';
 
 
 class Task{
+  late String _id;
   late String _text;
   late String _description;
   late bool _isCompleted;
@@ -26,6 +27,13 @@ class Task{
       return "Urgent";
     }
   }
+
+  String get id => _id;
+
+  set id(String value) {
+    _id = value;
+  }
+
   set category(CATEGORY value) {
     _category = value;
   }

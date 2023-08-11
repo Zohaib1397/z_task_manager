@@ -38,8 +38,13 @@ class TaskHandler implements TaskDAO {
 
   @override
   bool deleteTask(task) {
-    // TODO: implement deleteTask
-    throw UnimplementedError();
+    try{
+      _fireStore.collection('tasks').doc(task.id).delete();
+      return true;
+    }catch(e){
+      print(e.toString());
+      return false;
+    }
   }
 
   @override
@@ -59,6 +64,7 @@ class TaskHandler implements TaskDAO {
         final email = task.data()['email'];
         if (email == _auth.currentUser!.email) {
           final text = task.data()['title'];
+          final id = task.id;
           final description = task.data()['description'];
           print(text);
           final status = task.data()['status'];
@@ -87,6 +93,7 @@ class TaskHandler implements TaskDAO {
           Color taskColor = Color(hexValue);
           Task userTask =
           Task(text, description, status, dateTime, taskColor, taskCategory);
+          userTask.id = id;
           taskList.add(userTask);
         }
       }
