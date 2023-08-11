@@ -19,6 +19,7 @@ class TaskHandler implements TaskDAO {
       _fireStore.collection('tasks').add({
         'email': _auth.currentUser!.email,
         'title': task.text,
+        'description': task.description,
         'status': task.isCompleted,
         'year': task.dueDate.year,
         'month': task.dueDate.month,
@@ -58,6 +59,7 @@ class TaskHandler implements TaskDAO {
         final email = task.data()['email'];
         if (email == _auth.currentUser!.email) {
           final text = task.data()['title'];
+          final description = task.data()['description'];
           print(text);
           final status = task.data()['status'];
           final year = task.data()['year'];
@@ -84,7 +86,7 @@ class TaskHandler implements TaskDAO {
           int hexValue = int.parse(hexColor, radix: 16);
           Color taskColor = Color(hexValue);
           Task userTask =
-          Task(text, status, dateTime, taskColor, taskCategory);
+          Task(text, description, status, dateTime, taskColor, taskCategory);
           taskList.add(userTask);
         }
       }

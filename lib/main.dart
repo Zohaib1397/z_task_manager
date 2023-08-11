@@ -44,7 +44,7 @@ class TaskManager extends StatelessWidget {
       initialRoute: RedirectScreen.id,
       routes:{
         HomeScreen.id : (context) => const HomeScreen(),
-        NewTaskScreen.id : (context) => const NewTaskScreen(),
+        NewTaskScreen.id : (context) => NewTaskScreen(),
         LoginScreen.id : (context) => const LoginScreen(),
         RegisterScreen.id : (context) => const RegisterScreen(),
         SettingsScreen.id : (context) => const SettingsScreen(),

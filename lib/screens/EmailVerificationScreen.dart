@@ -36,14 +36,14 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     }
   }
 
-  void toggleCountDownTimer(){
+  void toggleCountDownTimer() {
     _currentTickerValue = countDownDuration;
     countDownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if(_currentTickerValue > 0){
+      if (_currentTickerValue > 0) {
         setState(() {
           _currentTickerValue--;
         });
-      }else {
+      } else {
         setState(() {
           countDownTimer!.cancel();
           isResendButtonActive = true;
@@ -51,10 +51,15 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
       }
     });
   }
+
   @override
   void dispose() {
-    countDownTimer!.cancel();
-    timer!.cancel();
+    if (countDownTimer != null) {
+      countDownTimer!.cancel();
+    }
+    if(timer!=null){
+      timer!.cancel();
+    }
     super.dispose();
   }
 
@@ -130,18 +135,22 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    onPressed: isResendButtonActive? (){
-                      setState(() {
-                        isResendButtonActive = false;
-                        toggleCountDownTimer();
-                      });
-                    } : null,
+                    onPressed: isResendButtonActive
+                        ? () {
+                            setState(() {
+                              isResendButtonActive = false;
+                              toggleCountDownTimer();
+                            });
+                          }
+                        : null,
                     child: const Text(
                       "Resend Verification Link",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  Text(isResendButtonActive? "" :"Resend in: ${_currentTickerValue.toString().padLeft(2,'0')}s"),
+                  Text(isResendButtonActive
+                      ? ""
+                      : "Resend in: ${_currentTickerValue.toString().padLeft(2, '0')}s"),
                 ],
               ),
             ),

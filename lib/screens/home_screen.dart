@@ -41,9 +41,10 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
+              Provider.of<TaskControllerProvider>(context, listen: false).clearForDispose();
               _auth.signOut();
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()));
+                  MaterialPageRoute(builder: (context) => const LoginScreen()));
             },
             icon: const Icon(Icons.logout),
           ),
@@ -209,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: DefaultTabController(
                     length: 3,
                     child: TabBar(

@@ -72,33 +72,40 @@ class _TaskCardState extends State<TaskCard> {
                   widget.taskData.text,
                   style: kDefaultTaskTitleStyle),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.calendar_month_outlined,
-                    size: 15,
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(DateFormat.yMMMd('en-US').format(widget.taskData.dueDate)),
-                ],
+              Text(
+                "Long long description details",
+
+              ),
+              const SizedBox(
+                height: 10,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  // Row(
+                  //   children: [
+                  //     const Icon(
+                  //       Icons.watch_later_outlined,
+                  //       size: 15,
+                  //     ),
+                  //     const SizedBox(
+                  //       width: 10,
+                  //     ),
+                  //     Text("Reminder Feature Require here"),
+                  //   ],
+                  // ),
                   Row(
                     children: [
                       const Icon(
-                        Icons.watch_later_outlined,
+                        Icons.calendar_month_outlined,
                         size: 15,
                       ),
                       const SizedBox(
                         width: 10,
                       ),
-                      Text("Reminder Feature Require here"),
+                      Text(DateFormat.yMMMd('en-US').format(widget.taskData.dueDate)),
                     ],
                   ),
                   Checkbox(

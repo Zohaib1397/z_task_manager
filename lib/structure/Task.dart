@@ -5,13 +5,14 @@ import 'CATEGORY.dart';
 
 class Task{
   late String _text;
+  late String _description;
   late bool _isCompleted;
   late DateTime _dueDate;
   late Color _color;
   late CATEGORY _category;
   // late DateTime timeStamp;
 
-  Task(this._text, this._isCompleted, this._dueDate, this._color,
+  Task(this._text,this. _description, this._isCompleted, this._dueDate, this._color,
       this._category);
 
   CATEGORY get category => _category;
@@ -27,6 +28,11 @@ class Task{
   }
   set category(CATEGORY value) {
     _category = value;
+  }
+
+  String get description => _description;
+  set description(String value) {
+    _description = value;
   }
 
   Color get color => _color;

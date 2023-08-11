@@ -19,9 +19,14 @@ class TaskControllerProvider extends ChangeNotifier{
         notifyListeners();
     }
 
+    void clearForDispose(){
+        tasksList.clear();
+        notifyListeners();
+    }
 
     bool addTaskToList(Task task){
         taskHandler.createTask(task);
+        tasksList.add(task);
         notifyListeners();
         return true;
     }

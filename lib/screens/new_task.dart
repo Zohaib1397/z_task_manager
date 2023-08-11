@@ -13,8 +13,8 @@ import '../structure/CATEGORY.dart';
 import '../structure/Task.dart';
 
 class NewTaskScreen extends StatefulWidget {
-  const NewTaskScreen({super.key});
-
+  NewTaskScreen({super.key, this.task});
+  Task? task;
   static const String id = "NewTask_Screen";
 
   @override
@@ -22,9 +22,8 @@ class NewTaskScreen extends StatefulWidget {
 }
 
 class _NewTaskScreenState extends State<NewTaskScreen> {
-
   final taskTitle = TextFieldHandler();
-
+  final descriptionField = TextFieldHandler();
 
   //This following Date Variable is the controller of Deadline/ Due Date TextField
   final date = TextFieldHandler();
@@ -113,9 +112,9 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
         backgroundColor: Colors.white,
-        title: const Text(
-          "New Task",
-          style: TextStyle(color: Colors.black),
+        title: Text(
+          widget.task!=null? "Edit Task" :"New Task",
+          style: const TextStyle(color: Colors.black),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -124,176 +123,239 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            //Top Task system and every thing
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "My New Task",
-                  style: TextStyle(
-                    color: Colors.black45,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                TextField(
-                  controller: taskTitle.controller,
-                  minLines: 1,
-                  maxLines: 2,
-                  style: kDefaultTaskTitleStyle,
-                  decoration: InputDecoration(
-                      hintStyle: const TextStyle(
-                        fontWeight: FontWeight.normal,
-                      ),
-                      hintText: "Type your task here",
-                      errorText: taskTitle.errorText,
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          Icons.circle,
-                          color: currentTaskColor,
-                        ),
-                        onPressed: () {
-                          ColorPicker(
-                            color: currentTaskColor,
-                            onColorChanged: (Color) {
-                              setState(() {
-                                currentTaskColor = Color;
-                              });
-                            },
-                          ).showPickerDialog(
-                            context,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                          );
-                        },
-                      )),
-                  onChanged: (value) => setState(() => taskTitle.errorText = ""),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Text(
-                  "Deadline",
-                  style: TextStyle(
-                    color: Colors.black45,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                TextField(
-                  readOnly: true,
-                  style: kDefaultTaskTitleStyle,
-                  decoration: InputDecoration(
-                    hintStyle: const TextStyle(
-                      fontWeight: FontWeight.normal,
-                    ),
-                    hintText: "Click calendar to select ->",
-                    errorText: date.errorText,
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.calendar_month_outlined),
-                      onPressed: () async {
-                        showDateTimePicker();
-                        setState(() {
-                          // if(date.val)
-                        });
-                      },
-                    ),
-                  ),
-                  controller: date.controller,
-                  onChanged: (value) {
-                    setState(() {
-                      date.errorText = "";
-                    });
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  "Type",
-                  style: TextStyle(
-                    color: Colors.black45,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        child: LayoutBuilder(
+          builder: (context, constraints) => SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
+              ),
+              child: IntrinsicHeight(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    RoundedCategoryButton(
-                        text: "Basic",
-                        isSelected: _category == CATEGORY.BASIC ? true : false,
-                        onPressed: () =>
-                            setState(() => _category = CATEGORY.BASIC)),
-                    RoundedCategoryButton(
-                        text: "Urgent",
-                        isSelected: _category == CATEGORY.URGENT ? true : false,
-                        onPressed: () =>
-                            setState(() => _category = CATEGORY.URGENT)),
-                    RoundedCategoryButton(
-                        text: "Important",
-                        isSelected:
-                            _category == CATEGORY.IMPORTANT ? true : false,
-                        onPressed: () =>
-                            setState(() => _category = CATEGORY.IMPORTANT)),
+                    //Top Task system and every thing
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "My New Task",
+                          style: TextStyle(
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextField(
+                          controller: taskTitle.controller,
+                          minLines: 1,
+                          maxLines: 2,
+                          style: kDefaultTaskTitleStyle,
+                          decoration: InputDecoration(
+                              hintStyle: const TextStyle(
+                                fontWeight: FontWeight.normal,
+                              ),
+                              hintText: "Type your task here",
+                              errorText: taskTitle.errorText,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  Icons.circle,
+                                  color: currentTaskColor,
+                                ),
+                                onPressed: () {
+                                  ColorPicker(
+                                    color: currentTaskColor,
+                                    onColorChanged: (Color) {
+                                      setState(() {
+                                        currentTaskColor = Color;
+                                      });
+                                    },
+                                  ).showPickerDialog(
+                                    context,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(30)),
+                                  );
+                                },
+                              )),
+                          onChanged: (value) =>
+                              setState(() => taskTitle.errorText = ""),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const Text(
+                          "Deadline",
+                          style: TextStyle(
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextField(
+                          readOnly: true,
+                          style: kDefaultTaskTitleStyle,
+                          decoration: InputDecoration(
+                            hintStyle: const TextStyle(
+                              fontWeight: FontWeight.normal,
+                            ),
+                            hintText: "Click calendar to select ->",
+                            errorText: date.errorText,
+                            suffixIcon: IconButton(
+                              icon: Icon(Icons.calendar_month_outlined),
+                              onPressed: () async {
+                                showDateTimePicker();
+                                setState(() {
+                                  // if(date.val)
+                                });
+                              },
+                            ),
+                          ),
+                          controller: date.controller,
+                          onChanged: (value) {
+                            setState(() {
+                              date.errorText = "";
+                            });
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(
+                          "Type",
+                          style: TextStyle(
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            RoundedCategoryButton(
+                                text: "Basic",
+                                isSelected:
+                                    _category == CATEGORY.BASIC ? true : false,
+                                onPressed: () =>
+                                    setState(() => _category = CATEGORY.BASIC)),
+                            RoundedCategoryButton(
+                                text: "Urgent",
+                                isSelected:
+                                    _category == CATEGORY.URGENT ? true : false,
+                                onPressed: () =>
+                                    setState(() => _category = CATEGORY.URGENT)),
+                            RoundedCategoryButton(
+                                text: "Important",
+                                isSelected:
+                                    _category == CATEGORY.IMPORTANT ? true : false,
+                                onPressed: () =>
+                                    setState(() => _category = CATEGORY.IMPORTANT)),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          color: Colors.black26,
+                          height: 1.5,
+                        ),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        const Text(
+                          "Description",
+                          style: TextStyle(
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextField(
+                          minLines: 2,
+                          maxLines: 10,
+                          style: kDefaultTaskTitleStyle.copyWith(),
+                          decoration: InputDecoration(
+                            hintStyle: const TextStyle(
+                              fontWeight: FontWeight.normal,
+                            ),
+                            hintText: "Write description here",
+                            errorText: descriptionField.errorText,
+                          ),
+                          controller: descriptionField.controller,
+                          onChanged: (value) {
+                            setState(() {
+                              descriptionField.errorText = "";
+                            });
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        //add more fields here if required
+                      ],
+                    ),
+                    //Bottom Button
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: MaterialButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              color: Theme.of(context).primaryColor,
+                              onPressed: () {
+                                try {
+                                  if (taskTitle.controller.text.isEmpty ||
+                                      date.controller.text.isEmpty ||
+                                      descriptionField.controller.text.isEmpty) {
+                                    setState(() {
+                                      if (taskTitle.controller.text.isEmpty) {
+                                        taskTitle.errorText =
+                                            "Cannot have empty task";
+                                      }
+                                      if (date.controller.text.isEmpty) {
+                                        date.errorText =
+                                            "Cannot have empty deadline";
+                                      }
+                                      if(descriptionField.controller.text.isEmpty){
+                                        descriptionField.errorText = "Cannot have empty description";
+                                      }
+                                    });
+                                    return;
+                                  }
+                                  final createTask = Task(
+                                      taskTitle.controller.text,
+                                      descriptionField.controller.text,
+                                      false,
+                                      storeDateTime,
+                                      currentTaskColor,
+                                      _category);
+                                  Provider.of<TaskControllerProvider>(context,
+                                          listen: false)
+                                      .addTaskToList(createTask);
+                                  Navigator.pop(context);
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(content: Text("$e")));
+                                }
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.all(20.0),
+                                child: Text(
+                                  "Save Task",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  color: Colors.black26,
-                  height: 1.5,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                //add more fields here if required
-              ],
-            ),
-            //Bottom Button
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: MaterialButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      color: Theme.of(context).primaryColor,
-                      onPressed: () {
-                        try{
-                          if(taskTitle.controller.text == "" || date.controller.text == ""){
-                            setState(() {
-                              if(taskTitle.controller.text=="") {taskTitle.errorText = "Cannot have empty task";}
-                              if(date.controller.text=="") {date.errorText = "Cannot have empty Deadline";}
-                            });
-                            return;
-                          }
-                          final createTask = Task(taskTitle.controller.text, false, storeDateTime, currentTaskColor, _category);
-                          Provider.of<TaskControllerProvider>(context, listen: false).addTaskToList(createTask);
-                          Navigator.pop(context);
-                        }catch(e){
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$e")));
-                        }
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.all(20.0),
-                        child: Text(
-                          "Save Task",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
