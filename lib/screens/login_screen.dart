@@ -47,12 +47,6 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isPasswordVisible = true;
 
   @override
-  void initState() {
-    super.initState();
-    _emailField.controller.text = "zohaib.ahmed1397@gmail.com";
-    _passwordField.controller.text = "654321";
-  }
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
