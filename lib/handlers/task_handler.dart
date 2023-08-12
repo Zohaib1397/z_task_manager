@@ -14,7 +14,7 @@ class TaskHandler implements TaskDAO {
   final _fireStore = FirebaseFirestore.instance;
 
   @override
-  bool createTask(task) {
+  Future<bool> create(task) async {
     try {
       _fireStore.collection('tasks').add({
         'email': _auth.currentUser!.email,
@@ -37,7 +37,7 @@ class TaskHandler implements TaskDAO {
   }
 
   @override
-  bool deleteTask(task) {
+  Future<bool> delete(task) async {
     try{
       _fireStore.collection('tasks').doc(task.id).delete();
       return true;
@@ -54,7 +54,7 @@ class TaskHandler implements TaskDAO {
   }
 
   @override
-  Future<List<Task>> getAllTasks() async {
+  Future<List<Task>> getAll() async {
     Completer<List<Task>> completer = Completer();
     bool completerCompleted = false;
     _fireStore.collection('tasks').snapshots().listen((snapshot){
@@ -62,7 +62,7 @@ class TaskHandler implements TaskDAO {
       final list = snapshot.docs;
       for (final task in list) {
         final email = task.data()['email'];
-        if (email == _auth.currentUser!.email) {
+        if (email == _auth.currentUser!.email && !completerCompleted) {
           final text = task.data()['title'];
           final id = task.id;
           final description = task.data()['description'];
@@ -107,7 +107,7 @@ class TaskHandler implements TaskDAO {
   }
 
   @override
-  searchTask(title) {
+  search(title) {
     // TODO: implement searchTask
     throw UnimplementedError();
   }
@@ -119,7 +119,7 @@ class TaskHandler implements TaskDAO {
   }
 
   @override
-  bool updateTask(task) {
+  Future<bool> update(task) {
     // TODO: implement updateTask
     throw UnimplementedError();
   }

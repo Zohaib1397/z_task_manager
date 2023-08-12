@@ -1,6 +1,7 @@
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:z_task_manager/constants/constants.dart';
 import 'dart:io' show IOException, Platform;
@@ -121,6 +122,10 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.white, // <-- SEE HERE
+            statusBarIconBrightness: Brightness.dark, //<-- For Android SEE HERE (dark icons)
+            statusBarBrightness: Brightness.light),
         iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
         backgroundColor: Colors.white,
@@ -175,6 +180,10 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                                 ),
                                 onPressed: () {
                                   ColorPicker(
+                                    pickersEnabled: {
+                                      ColorPickerType.both: false,
+                                      ColorPickerType.primary: false,
+                                    },
                                     color: currentTaskColor,
                                     onColorChanged: (Color) {
                                       setState(() {

@@ -27,14 +27,14 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   void initState() {
     super.initState();
 
-    isEmailVerified = _auth.currentUser!.emailVerified;
+    setState(() {
+      isEmailVerified = _auth.currentUser!.emailVerified;
+    });
 
     toggleCountDownTimer();
     if (!isEmailVerified) {
       sendVerificationEmail();
-
-      timer = Timer.periodic(
-          Duration(seconds: 3), (timer) => checkEmailVerification());
+      countDownRefresher();
     }
   }
 
@@ -67,9 +67,27 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
   void checkEmailVerification() async {
     try {
-      isEmailVerified = _auth.currentUser!.emailVerified;
+      await _auth.currentUser!.reload();
+      setState(() {
+        isEmailVerified = _auth.currentUser!.emailVerified;
+      });
+      print("Email verification state: $isEmailVerified");
+      if(!isEmailVerified){
+        countDownRefresher();
+      }else{
+        countDownTimer!.cancel();
+        timer!.cancel();
+      }
     } catch (e) {
       print(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Something wrong in verification checking")));
+    }
+  }
+  void countDownRefresher() {
+    if (timer == null || !timer!.isActive) {
+      timer = Timer.periodic(Duration(seconds: 3), (timer) {
+        checkEmailVerification();
+      });
     }
   }
 
@@ -90,9 +108,11 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
             appBar: AppBar(
               iconTheme: IconThemeData(color: Colors.black),
               elevation: 0,
-              title: const Text(
-                "Email Verification",
-                style: TextStyle(color: Colors.black),
+              title: const Center(
+                child: Text(
+                  "Email Verification",
+                  style: TextStyle(color: Colors.black),
+                ),
               ),
               backgroundColor: Colors.white,
             ),
@@ -158,4 +178,5 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
             ),
           );
   }
+
 }

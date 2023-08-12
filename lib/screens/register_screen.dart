@@ -33,7 +33,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       await _auth.createUserWithEmailAndPassword(
           email: _emailField.controller.text,
           password: _passwordField.controller.text);
-      await _auth.currentUser?.updateDisplayName(_username.controller.text);
+      await _auth.currentUser!.updateDisplayName(_username.controller.text);
       return true;
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -47,21 +47,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: LayoutBuilder(
-            builder: (context, constraints) => SingleChildScrollView(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight,
-                ),
-                child: IntrinsicHeight(
+        child: LayoutBuilder(
+          builder: (context, constraints) => SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
+              ),
+              child: IntrinsicHeight(
+                child: Padding(
+                  padding: const EdgeInsets.all(30.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      const Flexible(
+                      const Hero(
+                        tag: "backcapsLogo",
                         child: Padding(
                           padding: EdgeInsets.all(30.0),
                           child: Image(
@@ -188,10 +190,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   return;
                                 }
                                 if(await createAccountWithEmailAndPassword()){
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) => const RedirectScreen()));
+                                  Navigator.pushNamed(context, RedirectScreen.id );
 
                                 }else {
                                   return;
@@ -254,6 +253,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           TextButton(
                             child: const Text("Login"),
                             onPressed: () {
+                              if(_auth.currentUser!=null){
+                                _auth.signOut();
+                              }
                               Navigator.pop(context);
                             },
                           )

@@ -1,7 +1,5 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:z_task_manager/services/task_controller_provider.dart';
+import 'package:flutter/services.dart';
 import 'package:z_task_manager/constants/constants.dart';
 import 'package:z_task_manager/screens/ForgetPasswordScreen.dart';
 import 'package:z_task_manager/screens/redirect.dart';
@@ -9,8 +7,6 @@ import 'package:z_task_manager/screens/register_screen.dart';
 import 'package:z_task_manager/structure/TextFieldHandler.dart';
 import '../constants/reusable_ui.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import '../services/google_sign_in_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -49,21 +45,32 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.white, // <-- SEE HERE
+        statusBarIconBrightness: Brightness.dark, //<-- For Android SEE HERE (dark icons)
+        statusBarBrightness: Brightness.light),
+forceMaterialTransparency: true,
+      ),
+      backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: LayoutBuilder(
-            builder: (context, constraints) => SingleChildScrollView(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight,
-                ),
-                child: IntrinsicHeight(
+        child: LayoutBuilder(
+          builder: (context, constraints) => SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
+              ),
+              child: IntrinsicHeight(
+                child: Padding(
+                  padding: const EdgeInsets.all(30.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      const Flexible(
+                      const Hero(
+                        tag: "backcapsLogo",
                         child: Padding(
                           padding: EdgeInsets.all(30.0),
                           child: Image(
@@ -135,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               onPressed: () async{
                                 if (await signInWithEmailAndPassword()){
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const RedirectScreen()));
+                                  Navigator.pushNamed(context, RedirectScreen.id);
                                 }
                                 else{
                                   return;

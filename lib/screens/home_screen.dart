@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:z_task_manager/constants/constants.dart';
 import 'package:z_task_manager/screens/login_screen.dart';
@@ -46,6 +47,10 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          systemOverlayStyle: SystemUiOverlayStyle(
+              statusBarColor: Colors.white, // <-- SEE HERE
+              statusBarIconBrightness: Brightness.dark, //<-- For Android SEE HERE (dark icons)
+              statusBarBrightness: Brightness.light),
           leading: IconButton(
             onPressed: () {
               final provider =
@@ -62,13 +67,19 @@ class _HomeScreenState extends State<HomeScreen> {
             IconButton(
                 onPressed: () {
                   showAboutDialog(
+                    children: [
+                      Text("-> Initial builds may include bugs"),
+                    ],
                     context: context,
                     applicationName: "Z-Tasker",
                     applicationVersion: "v1.0",
                     applicationIcon: const Expanded(
-                      child: Image(
-                        image: AssetImage("assets/logos/backcaps.png"),
-                        width: 40,
+                      child: Hero(
+                        tag: "backcapsLogo",
+                        child: Image(
+                          image: AssetImage("assets/logos/backcaps.png"),
+                          width: 40,
+                        ),
                       ),
                     ),
                   );
@@ -80,9 +91,12 @@ class _HomeScreenState extends State<HomeScreen> {
           elevation: 0,
           backgroundColor: Colors.white,
           title: const Center(
-            child: Image(
-              image: AssetImage("assets/logos/backcaps.png"),
-              width: 100,
+            child: Hero(
+              tag: "backcapsLogo",
+              child: Image(
+                image: AssetImage("assets/logos/backcaps.png"),
+                width: 100,
+              ),
             ),
           ),
         ),
@@ -117,8 +131,9 @@ class _HomeScreenState extends State<HomeScreen> {
         List<Task> taskList = [];
         if (searchField.controller.text != "") {
           taskList = taskController.tasksList
-              .where((element) =>
-                  element.text.toLowerCase().contains(searchField.controller.text.toLowerCase()))
+              .where((element) => element.text
+                  .toLowerCase()
+                  .contains(searchField.controller.text.toLowerCase()))
               .toList();
         } else {
           taskList = taskController.tasksList;
@@ -357,31 +372,39 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(16),
           child: Dismissible(
-            direction: DismissDirection.endToStart,
             onDismissed: (direction) {
               if (direction == DismissDirection.endToStart) {
                 setState(() =>
                     Provider.of<TaskControllerProvider>(context, listen: false)
                         .removeTaskFromList(task));
               }
+              // else if (direction == DismissDirection.startToEnd) {
+              //   task.isCompleted = true;
+              // }
             },
             key: ObjectKey(task),
-            background: buildDeleteContainer(),
+            direction: DismissDirection.endToStart,
+            background: buildSwipingContainer(
+                Colors.red, "Delete", Icons.delete, Alignment.centerRight),
+            // background: buildSwipingContainer(
+            //     Colors.green, "Done", Icons.check_circle, Alignment.centerLeft),
             child: TaskCard(taskData: task),
           ),
         ),
       );
 
-  Widget buildDeleteContainer() => Container(
-        color: Colors.red,
-        alignment: Alignment.centerRight,
-        child: const Padding(
-          padding: EdgeInsets.all(15.0),
+  Widget buildSwipingContainer(
+          Color color, String text, IconData icon, Alignment alignment) =>
+      Container(
+        color: color,
+        alignment: alignment,
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.delete, color: Colors.white),
-              Text("Delete", style: TextStyle(color: Colors.white)),
+              Icon(icon, color: Colors.white),
+              Text(text, style: const TextStyle(color: Colors.white)),
             ],
           ),
         ),
