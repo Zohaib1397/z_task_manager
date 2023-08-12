@@ -1,16 +1,27 @@
-# z_task_manager
+# Z-Tasker 
 
-A new Flutter project.
+Cross-platform application built using flutter<br>
+Firebase Authentication and Firebase FireStore is used for account management and Database respectively <br>
+## Feature set
 
-## Getting Started
+<ul>
+  <li>Email Verification using firebase</li>
+  <li>Assign each task a Title, Description, Color, DueDate,and Type</li>
+  <li>Mark task as done</li>
+  <li>Swipe to delete</li>
+</ul>
 
-This project is a starting point for a Flutter application.
+## Upcoming builds include
+<ul>
+  <li>Shared Preferences (Local Database)</li>
+  <li>Improved animations</li>
+  <li>Fix minor bugs reported</li>
+</ul>
 
-A few resources to get you started if this is your first Flutter project:
+## Images
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+<span><img width="564" alt="image" src="https://github.com/Zohaib1397/z_task_manager/assets/66197508/cef35f69-7138-45ea-b3ea-4376abfc014a">
+</span>
+<img width="564" alt="image" src="https://github.com/Zohaib1397/z_task_manager/assets/66197508/7dbc6157-0412-49b3-bb2d-cdeb5966b09d">
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img width="564" alt="image" src="https://github.com/Zohaib1397/z_task_manager/assets/66197508/1a1afa5c-5f01-4100-9b76-bf0f92b662a7">
