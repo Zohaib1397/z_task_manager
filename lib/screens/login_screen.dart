@@ -48,11 +48,11 @@ class _LoginScreenState extends State<LoginScreen> {
       extendBody: true,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: Colors.white, // <-- SEE HERE
-        statusBarIconBrightness: Brightness.dark, //<-- For Android SEE HERE (dark icons)
-        statusBarBrightness: Brightness.light),
-forceMaterialTransparency: true,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors.white, // <-- SEE HERE
+          statusBarIconBrightness: Brightness.dark, //<-- For Android SEE HERE (dark icons)
+          statusBarBrightness: Brightness.light),
+        forceMaterialTransparency: true,
       ),
       backgroundColor: Colors.white,
       body: SafeArea(
